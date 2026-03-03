@@ -66,9 +66,13 @@ PanelWindow {
 
 
         delegate: Image {
-            width: Screen.width / configs.number_of_pictures
+            width: Screen.width / configs.number_of_pictures - 10
             height: 500
 
+
+            transform: Shear {
+                xFactor: -0.25   // ← change angle here (- left, + right)
+            }
             fillMode: Image.PreserveAspectCrop
             asynchronous: true
             cache: true
