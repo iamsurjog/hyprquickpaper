@@ -82,7 +82,7 @@ PanelWindow {
                     wheel.accepted = false     // VERY important → give back to ListView
                 }
                 onClicked: {
-                    Quickshell.execDetached(["waypaper", "--wallpaper",filePath])
+                    Quickshell.execDetached(["bash", Quickshell.shellPath("commands.sh"), filePath])
                     Qt.quit()
                 }
             }
