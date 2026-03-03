@@ -71,7 +71,7 @@ PanelWindow {
 
 
             transform: Shear {
-                xFactor: -0.25   // ← change angle here (- left, + right)
+                xFactor: -0.25
             }
             fillMode: Image.PreserveAspectCrop
             asynchronous: true
