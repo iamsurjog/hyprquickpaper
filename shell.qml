@@ -29,6 +29,7 @@ PanelWindow {
             id: configs
             property string wallpaper_path
             property int number_of_pictures
+            property string border_color
         }
     }
 
@@ -107,7 +108,7 @@ PanelWindow {
 
             color: "transparent"
             border.width: 4
-            border.color: "white"
+            border.color: configs.border_color
 
             transform: Shear { xFactor: -0.25 }
 
