@@ -80,7 +80,7 @@ PanelWindow {
             contentX = clampX(target)
         }
         function ensureVisibleAnimated(i) {
-            const itemW = width / configs.number_of_pictures - 20
+            const itemW = width / configs.number_of_pictures - 10
             const step = itemW + spacing
 
             const itemStart = i * step
