@@ -1,4 +1,6 @@
 {
-    "wallpaper_path": "path/to/wallpapers",
-    "number_of_pictures": 3
+    "wallpaper_path": "/path/to/wallpapers",
+    "number_of_pictures": 7,
+    "border_color": "#E2DEDD"
 }
+
