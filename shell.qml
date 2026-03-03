@@ -1,18 +1,21 @@
-// @ pragma UseQApplication
-// @ pragma Env QT_QUICK_CONTROLS_STYLE=Basic
-
 import Quickshell
 import Quickshell.Io // for Process
 import QtQuick
 import Qt.labs.folderlistmodel
+import Quickshell.Wayland
 
 PanelWindow {
+    id: mainWindow
     implicitHeight: 500
     aboveWindows: true
     exclusionMode: "Ignore"
     // exclusiveZone: 1
     implicitWidth: Screen.width
     color: "transparent"
+
+    WlrLayershell.layer: WlrLayer.Overlay
+    WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+
     FileView{
         path: Quickshell.shellPath("config.json")
 
@@ -28,20 +31,6 @@ PanelWindow {
             property int number_of_pictures
         }
     }
-    // TODO: remove this
-    // // TEST PART ------------------------------------------------------------------------------------
-    //     Image{
-    //         id: myImage
-    //         source: "/home/randomguy/Pictures/wallpaper.png" // Set the image source here
-    //         anchors.centerIn: parent // Center the image within the Rectangle
-    //         // Optional: set width/height or use fillMode to control scaling
-    //         width: parent.width/configs.number_of_pictures
-    //         height: 100
-    //     }
-    //     Text{
-    //         text: configs.number_of_pictures
-    //     }
-    // // TEST PART END --------------------------------------------------------------------------------
 
     FolderListModel {
         id: folderModel
@@ -55,12 +44,26 @@ PanelWindow {
     }
 
     ListView {
+        id: list
         anchors.fill: parent
+        focus: true
 
         model: folderModel
         orientation: ListView.Horizontal
         spacing: 4
         clip: true
+        function clampX(x) {
+            const maxX = contentWidth - width
+            return Math.max(0, Math.min(x, maxX))
+        }
+        Behavior on contentX {
+            NumberAnimation {
+                duration: 140
+                easing.type: Easing.OutCubic
+            }
+        }
+
+
 
         delegate: Image {
             width: Screen.width / configs.number_of_pictures
@@ -74,8 +77,39 @@ PanelWindow {
 
             MouseArea {
                 anchors.fill: parent
-                onClicked: Quickshell.execDetached(["waypaper", "--wallpaper",filePath])
+                onWheel: function(wheel) {
+                    list.contentX = list.clampX(list.contentX - wheel.angleDelta.y * 2)
+                    wheel.accepted = false     // VERY important → give back to ListView
+                }
+                onClicked: {
+                    Quickshell.execDetached(["waypaper", "--wallpaper",filePath])
+                    Qt.quit()
+                }
             }
+        }
+
+        Keys.onPressed: function(event) {
+            const step = width * 1/configs.number_of_pictures
+            const big = width * 1
+
+
+
+            if (event.key === Qt.Key_J){
+                contentX = clampX(contentX + step)
+            }
+            else if (event.key === Qt.Key_K){
+                contentX = clampX(contentX - step)
+            }
+            else if (event.key === Qt.Key_D){
+                contentX = clampX(contentX + big)
+            }
+            else if (event.key === Qt.Key_U){
+                contentX = clampX(contentX - big)
+            }
+            else if (event.key === Qt.Key_Escape) Qt.quit()
+            else return
+
+            event.accepted = true
         }
     }
 }
