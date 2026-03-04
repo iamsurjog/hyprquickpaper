@@ -32,6 +32,23 @@ PanelWindow {
             property string border_color
         }
     }
+    Repeater{
+        visible: false
+        Image {
+            visible: false
+
+            transform: Shear { xFactor: -0.25 }
+            fillMode: Image.PreserveAspectCrop
+            // asynchronous: false
+            cache: true
+            source: "file://" + filePath
+
+            sourceSize.width: width
+            sourceSize.height: height
+        }
+
+    }
+
 
     FolderListModel {
         id: folderModel
@@ -133,18 +150,29 @@ PanelWindow {
             height: 500
 
             property bool selected: index === list.selectedIndex
+            property bool shownNow: Math.abs(list.selectedIndex - index) < configs.number_of_pictures + 1
+            property bool everShown: false
+
+            onShownNowChanged: {
+                if (shownNow)
+                    everShown = true
+            }
 
 
-
+            // Text{
+            //     text: parent.selectedDistance
+            // }
 
             Image {
                 anchors.fill: parent
-
                 transform: Shear { xFactor: -0.25 }
                 fillMode: Image.PreserveAspectCrop
                 asynchronous: true
                 cache: true
-                source: "file://" + filePath
+                source: parent.everShown ? "file://" + filePath : ""
+                
+                sourceSize.width: width
+                sourceSize.height: height
             }
 
             MouseArea {
