@@ -98,7 +98,11 @@ PanelWindow {
             }
         }
         Behavior on contentX {
-            SmoothedAnimation { velocity: 8000 }
+            SmoothedAnimation {
+                id: anim 
+                property int v: 3000
+                velocity: v 
+            }
         }
         Rectangle {
             id: selector
@@ -163,18 +167,24 @@ PanelWindow {
             const big  = configs.number_of_pictures
 
             if (event.key === Qt.Key_J){
+                anim.v = 3000
                 selectedIndex = clampIndex(selectedIndex + step)
                 ensureVisibleAnimated(selectedIndex)
             } else if (event.key === Qt.Key_K){
+                anim.v =  3000
                 selectedIndex = clampIndex(selectedIndex - step)
                 ensureVisibleAnimated(selectedIndex)
             } else if (event.key === Qt.Key_D){
+                anim.v = 3000 * configs.number_of_pictures
                 selectedIndex = clampIndex(selectedIndex + big)
                 ensureVisibleAnimated(selectedIndex)
             } else if (event.key === Qt.Key_U){
+                anim.v = 3000 * configs.number_of_pictures
                 selectedIndex = clampIndex(selectedIndex - big)
                 ensureVisibleAnimated(selectedIndex)
             } else if (event.key === Qt.Key_Space){
+                activateCurrent()
+            } else if (event.key === Qt.Key_Return){
                 activateCurrent()
             } else if (event.key === Qt.Key_Escape){
                 Qt.quit()
