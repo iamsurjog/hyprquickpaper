@@ -32,22 +32,6 @@ PanelWindow {
             property string border_color
         }
     }
-    Repeater{
-        visible: false
-        Image {
-            visible: false
-
-            transform: Shear { xFactor: -0.25 }
-            fillMode: Image.PreserveAspectCrop
-            // asynchronous: false
-            cache: true
-            source: "file://" + filePath
-
-            sourceSize.width: width
-            sourceSize.height: height
-        }
-
-    }
 
 
     FolderListModel {
@@ -165,14 +149,16 @@ PanelWindow {
 
             Image {
                 anchors.fill: parent
-                transform: Shear { xFactor: -0.25 }
                 fillMode: Image.PreserveAspectCrop
                 asynchronous: true
-                cache: true
+                cache: false
+                smooth: false
                 source: parent.everShown ? "file://" + filePath : ""
-                
-                sourceSize.width: width
-                sourceSize.height: height
+                retainWhileLoading: true
+                sourceSize.width: width * 1
+                sourceSize.height: height * 1
+                transform: Shear { xFactor: -0.25 }
+                autoTransform: true
             }
 
             MouseArea {
