@@ -4,45 +4,43 @@ import QtQuick
 import Qt.labs.folderlistmodel
 import Quickshell.Wayland
 
+
 PanelWindow {
-    id: mainWindow
     implicitHeight: 500
-    aboveWindows: true
-    exclusionMode: "Ignore"
-    // exclusiveZone: 1
     implicitWidth: Screen.width
     color: "transparent"
 
+    aboveWindows: true
+    exclusionMode: "Ignore"
+    exclusiveZone: 1
+
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.keyboardFocus: WlrKeyboardFocus.Exclusive
+    Component.onCompleted: {
+        Quickshell.execDetached(["bash", Quickshell.shellPath("cache.sh"), Quickshell.shellDir])
+        console.log(Quickshell.shellDir)
+    }
 
-    FileView{
+    FileView {
         path: Quickshell.shellPath("config.json")
-
-        // when changes are made on disk, reload the file's content
         watchChanges: true
-        onFileChanged: this.reload()
+        onFileChanged: reload()
 
-        // when changes are made to properties in the adapter, save them
-        onAdapterUpdated: writeAdapter()
-        JsonAdapter{
+        JsonAdapter {
             id: configs
             property string wallpaper_path
+            property string cache_path
             property int number_of_pictures
             property string border_color
         }
     }
 
-
     FolderListModel {
         id: folderModel
-
         folder: "file://" + configs.wallpaper_path
         showDirs: false
-        showFiles: true
-        nameFilters: ["*.png", "*.jpg", "*.webp"]
+        nameFilters: ["*.png","*.jpg","*.webp"]
         sortField: FolderListModel.Name
-        sortReversed: false
     }
 
     ListView {
@@ -54,16 +52,14 @@ PanelWindow {
         orientation: ListView.Horizontal
         spacing: 4
         clip: true
-        cacheBuffer: width * 3
+        // reuseItems: true
+        // cacheBuffer: width * 2
 
         property int selectedIndex: 0
+        property real tileWidth: width / configs.number_of_pictures - 10
 
         function clampIndex(i) {
             return Math.max(0, Math.min(i, count - 1))
-        }
-
-        function ensureVisible() {
-            positionViewAtIndex(selectedIndex, ListView.Contain)
         }
 
         function activateCurrent() {
@@ -73,50 +69,38 @@ PanelWindow {
         }
 
         function clampX(x) {
-            const maxX = contentWidth - width
-            return Math.max(0, Math.min(x, maxX))
+            return Math.max(0, Math.min(x, contentWidth - width))
         }
-        function scrollToIndex(i) {
-            const itemW = width / configs.number_of_pictures
-            const target = i * (itemW + spacing)
-            contentX = clampX(target)
-        }
+
         function ensureVisibleAnimated(i) {
-            const itemW = width / configs.number_of_pictures - 10
-            const step = itemW + spacing
-
+            const step = tileWidth + spacing
             const itemStart = i * step
-            const itemEnd   = itemStart + itemW + 20
+            const itemEnd = itemStart + tileWidth + 20
 
-            const viewStart = contentX
-            const viewEnd   = contentX + width
-
-            if (itemStart < viewStart) {
-                contentX = clampX(itemStart)   // align exactly to tile
-            }
-            else if (itemEnd > viewEnd) {
+            if (itemStart < contentX)
+                contentX = clampX(itemStart)
+            else if (itemEnd > contentX + width)
                 contentX = clampX(itemStart - (width - step))
-            }
         }
+
         Behavior on contentX {
             SmoothedAnimation {
-                id: anim 
+                id: anim
                 property int v: 3000
-                velocity: v 
+                velocity: v
             }
         }
-        Rectangle {
-            id: selector
-            z: 10
-            width: Screen.width / configs.number_of_pictures - 10
-            height: 500
 
+        Rectangle {
+            z: 10
+            width: list.tileWidth
+            height: 500
             color: "transparent"
+
             border.width: 4
             border.color: configs.border_color
 
             transform: Shear { xFactor: -0.25 }
-
 
             x: list.selectedIndex * (width + list.spacing) - list.contentX
 
@@ -128,37 +112,31 @@ PanelWindow {
             }
         }
 
-
         delegate: Item {
-            width: Screen.width / configs.number_of_pictures - 10
+            width: list.tileWidth
             height: 500
+            visible: shownNow
 
-            property bool selected: index === list.selectedIndex
-            property bool shownNow: Math.abs(list.selectedIndex - index) < configs.number_of_pictures + 1
-            property bool everShown: false
-
-            onShownNowChanged: {
-                if (shownNow)
-                    everShown = true
-            }
-
-
-            // Text{
-            //     text: parent.selectedDistance
-            // }
+            property bool shownNow:
+                index >= list.selectedIndex - configs.number_of_pictures &&
+                index <= list.selectedIndex + configs.number_of_pictures
 
             Image {
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectCrop
+
                 asynchronous: true
                 cache: false
-                smooth: false
-                source: parent.everShown ? "file://" + filePath : ""
-                retainWhileLoading: true
-                sourceSize.width: width * 1
-                sourceSize.height: height * 1
+                smooth: true
+
+                source: shownNow
+                    ? "file://" + configs.cache_path + fileName
+                    : ""
+
+                sourceSize.width: width
+                sourceSize.height: height
+
                 transform: Shear { xFactor: -0.25 }
-                autoTransform: true
             }
 
             MouseArea {
@@ -170,7 +148,9 @@ PanelWindow {
                 }
 
                 onWheel: function(wheel) {
-                    list.contentX = list.clampX(list.contentX - wheel.angleDelta.y * 2)
+                    list.contentX = list.clampX(
+                        list.contentX - wheel.angleDelta.y * 2
+                    )
                     wheel.accepted = false
                 }
             }
@@ -178,34 +158,37 @@ PanelWindow {
 
         Keys.onPressed: function(event) {
             const step = 1
-            const big  = configs.number_of_pictures
+            const big = configs.number_of_pictures
 
-            if (event.key === Qt.Key_J){
+            if (event.key === Qt.Key_J) {
                 anim.v = 3000
                 selectedIndex = clampIndex(selectedIndex + step)
                 ensureVisibleAnimated(selectedIndex)
-            } else if (event.key === Qt.Key_K){
-                anim.v =  3000
+
+            } else if (event.key === Qt.Key_K) {
+                anim.v = 3000
                 selectedIndex = clampIndex(selectedIndex - step)
                 ensureVisibleAnimated(selectedIndex)
-            } else if (event.key === Qt.Key_D){
-                anim.v = 3000 * configs.number_of_pictures
+
+            } else if (event.key === Qt.Key_D) {
+                anim.v = 3000 * big
                 selectedIndex = clampIndex(selectedIndex + big)
                 ensureVisibleAnimated(selectedIndex)
-            } else if (event.key === Qt.Key_U){
-                anim.v = 3000 * configs.number_of_pictures
+
+            } else if (event.key === Qt.Key_U) {
+                anim.v = 3000 * big
                 selectedIndex = clampIndex(selectedIndex - big)
                 ensureVisibleAnimated(selectedIndex)
-            } else if (event.key === Qt.Key_Space){
+
+            } else if (event.key === Qt.Key_Space || event.key === Qt.Key_Return) {
                 activateCurrent()
-            } else if (event.key === Qt.Key_Return){
-                activateCurrent()
-            } else if (event.key === Qt.Key_Escape){
+
+            } else if (event.key === Qt.Key_Escape) {
                 Qt.quit()
+
             } else return
 
             event.accepted = true
         }
     }
 }
-
