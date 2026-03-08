@@ -7,6 +7,8 @@ Wallpaper selector made using quickshell. PRs and contributions are appreciated.
 
 ## Demo
 
+https://github.com/user-attachments/assets/375e3696-e62d-48bf-8af6-18d2be86b224
+
 
 ## Dependencies
 
