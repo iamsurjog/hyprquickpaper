@@ -1,6 +1,6 @@
 # HyprQuickPaper
 
-Wallpaper selector made using quickshell. Inspired by : [ https://github.com/ilyamiro/nixos-configuration ]
+Wallpaper selector made using quickshell. Inspired by : [ilyamiro's dots](https://github.com/ilyamiro/nixos-configuration)
 PRs and contributions are appreciated.
 
 > [!IMPORTANT]
