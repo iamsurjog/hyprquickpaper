@@ -72,11 +72,10 @@ On using it for the first time it will not load anything. Press escape and then 
 - Scrolling/click and dragging also works for scrolling
 - Clicking also allows selection of a wallpaper
 
-## Known issues
 
-- Missing the trailing "/" in the paths in config.json breaks it
+## Issues/Fixes
 
-## TODO
-
- - [ ] Show a "Caching... " text when caching
- - [ ] Pressing J/K after using mouse to scroll takes a long time to scroll back
+- [ ] Missing the trailing "/" in the paths in config.json breaks it
+- [ ] Show a "Caching... " text when caching
+- [ ] Even after caching is over, images do not load
+- [ ] Pressing J/K after using mouse to scroll takes a long time to scroll back
