@@ -74,7 +74,7 @@ On using it for the first time it will not load anything. Press escape and then 
 - Clicking also allows selection of a wallpaper
 
 
-## Issues/Fixes
+## Issues/TODOS
 
 - [ ] Missing the trailing "/" in the paths in config.json breaks it
 - [ ] Show a "Caching... " text when caching
