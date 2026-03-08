@@ -39,13 +39,19 @@ go to the `config.json` file and change the `"wallpaper_path"` and the `"cache_p
 > Make sure to use absolute path (/home/...) for the path and put the trailing "/" at the end of the path
 
 Example config.json
-```json
+```{json}
 {
     "wallpaper_path": "/home/<usrname>/Pictures/Wallpapers/",
     "cache_path": "/home/<usrname>/.cache/quickshell/thumbs/",
     "number_of_pictures": 7,
     "border_color": "#A98881"
 }
+```
+
+Also add your wallpaper changing commands to the `commands.sh` file. Selecting a wallpaper runs the command with the path to the wallpaper passed as a parameter. An example on how to use it with swww is given.
+
+```{bash}
+swww img $1 -t grow --transition-duration 1
 ```
 
 ## Usage
