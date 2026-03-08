@@ -41,7 +41,7 @@ PanelWindow {
         id: folderModel
         folder: "file://" + configs.wallpaper_path
         showDirs: false
-        nameFilters: ["*.png","*.jpg","*.webp"]
+        nameFilters: ["*.png","*.jpg"]
         sortField: FolderListModel.Name
     }
 
@@ -124,6 +124,7 @@ PanelWindow {
                 index <= list.selectedIndex + configs.number_of_pictures
 
             Image {
+                id: img
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectCrop
 
@@ -141,6 +142,23 @@ PanelWindow {
                 sourceSize.height: height
 
                 transform: Shear { xFactor: -0.25 }
+
+                Timer {
+                    id: retryTimer
+                    interval: 1000
+                    repeat: false
+                    onTriggered: {
+                        let s = img.source
+                        img.source = ""
+                        img.source = s
+                    }
+                }
+
+                onStatusChanged: {
+                    if (status === Image.Error) {
+                        retryTimer.start()
+                    }
+                }
             }
 
             MouseArea {

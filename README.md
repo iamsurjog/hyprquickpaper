@@ -84,5 +84,5 @@ On using it for the first time it will not load anything. Press escape and then 
 
 - [ ] Missing the trailing "/" in the paths in config.json breaks it
 - [ ] Show a "Caching... " text when caching
-- [ ] Even after caching is over, images do not load
+- [ ] Initial caching takes up lot of resources
 - [ ] Pressing J/K after using mouse to scroll takes a long time to scroll back
