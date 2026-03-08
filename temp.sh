@@ -1,2 +1,0 @@
-cwd=`pwd`
-echo "$cwd"
