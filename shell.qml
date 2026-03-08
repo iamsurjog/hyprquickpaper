@@ -6,9 +6,11 @@ import Quickshell.Wayland
 
 
 PanelWindow {
+    id: main
     implicitHeight: 500
     implicitWidth: Screen.width
     color: "transparent"
+    property int speed: 3000
 
     aboveWindows: true
     exclusionMode: "Ignore"
@@ -53,7 +55,7 @@ PanelWindow {
         spacing: 4
         clip: true
         // reuseItems: true
-        // cacheBuffer: width * 2
+        cacheBuffer: width * 2
 
         property int selectedIndex: 0
         property real tileWidth: width / configs.number_of_pictures - 10
@@ -86,7 +88,7 @@ PanelWindow {
         Behavior on contentX {
             SmoothedAnimation {
                 id: anim
-                property int v: 3000
+                property int v: main.speed
                 velocity: v
             }
         }
@@ -115,7 +117,7 @@ PanelWindow {
         delegate: Item {
             width: list.tileWidth
             height: 500
-            visible: shownNow
+            // visible: shownNow
 
             property bool shownNow:
                 index >= list.selectedIndex - configs.number_of_pictures &&
@@ -129,9 +131,11 @@ PanelWindow {
                 cache: false
                 smooth: true
 
-                source: shownNow
-                    ? "file://" + configs.cache_path + fileName
-                    : ""
+                source: "file://" + configs.cache_path + fileName
+
+                // source: shownNow
+                //     ? "file://" + configs.cache_path + fileName
+                //     : ""
 
                 sourceSize.width: width
                 sourceSize.height: height
@@ -161,22 +165,22 @@ PanelWindow {
             const big = configs.number_of_pictures
 
             if (event.key === Qt.Key_J) {
-                anim.v = 3000
+                anim.v = main.speed
                 selectedIndex = clampIndex(selectedIndex + step)
                 ensureVisibleAnimated(selectedIndex)
 
             } else if (event.key === Qt.Key_K) {
-                anim.v = 3000
+                anim.v = main.speed
                 selectedIndex = clampIndex(selectedIndex - step)
                 ensureVisibleAnimated(selectedIndex)
 
             } else if (event.key === Qt.Key_D) {
-                anim.v = 3000 * big
+                anim.v = main.speed * big
                 selectedIndex = clampIndex(selectedIndex + big)
                 ensureVisibleAnimated(selectedIndex)
 
             } else if (event.key === Qt.Key_U) {
-                anim.v = 3000 * big
+                anim.v = main.speed * big
                 selectedIndex = clampIndex(selectedIndex - big)
                 ensureVisibleAnimated(selectedIndex)
 
