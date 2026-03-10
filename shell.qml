@@ -115,14 +115,29 @@ PanelWindow {
         }
 
         delegate: Item {
+            property bool active: index === list.selectedIndex
             width: list.tileWidth
+            // width: active? 1000:list.tileWidth
             height: 500
             // visible: shownNow
+            Behavior on width{
+                NumberAnimation {
+                    duration: 50
+                    easing.type: Easing.OutCubic
+                }
+            }
+            // anchors.centerIn: parent
 
-            property bool shownNow:
-                index >= list.selectedIndex - configs.number_of_pictures &&
-                index <= list.selectedIndex + configs.number_of_pictures
 
+            // property bool shownNow:
+            //     index >= list.selectedIndex - configs.number_of_pictures &&
+            //     index <= list.selectedIndex + configs.number_of_pictures
+
+            Text{
+                id: alt
+                text: "Loading..."
+
+            }
             Image {
                 id: img
                 anchors.fill: parent
@@ -156,6 +171,7 @@ PanelWindow {
 
                 onStatusChanged: {
                     if (status === Image.Error) {
+                        alt.text = "Caching"
                         retryTimer.start()
                     }
                 }
