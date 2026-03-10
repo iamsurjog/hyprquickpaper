@@ -5,6 +5,7 @@ import Qt.labs.folderlistmodel
 import Quickshell.Wayland
 
 
+
 PanelWindow {
     id: main
     implicitHeight: 500
@@ -136,7 +137,10 @@ PanelWindow {
             Text{
                 id: alt
                 text: "Loading..."
-
+                color: configs.border_color
+                anchors.centerIn: parent
+                font.pixelSize: 16
+                transform: Shear { xFactor: -0.25 }
             }
             Image {
                 id: img

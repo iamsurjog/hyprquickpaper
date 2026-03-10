@@ -35,7 +35,7 @@ git clone https://github.com/iamsurjog/hyprquickpaper ~/.config/quickshell/hyprq
 
 go to the `config.json` file and change the `"wallpaper_path"` and the `"cache_path"` variables
 
-> [!IMPORTANT]
+> [!WARNING]
 > Make sure to use absolute path (/home/...) for the path and put the trailing "/" at the end of the path
 
 Example config.json
@@ -44,7 +44,8 @@ Example config.json
     "wallpaper_path": "/home/<usrname>/Pictures/Wallpapers/",
     "cache_path": "/home/<usrname>/.cache/quickshell/thumbs/",
     "number_of_pictures": 7,
-    "border_color": "#A98881"
+    "border_color": "#A98881",
+    "cache_batch_size": 20
 }
 ```
 
@@ -53,6 +54,13 @@ Also add your wallpaper changing commands to the `commands.sh` file. Selecting a
 ```{bash}
 swww img $1 -t grow --transition-duration 1
 ```
+
+You can change the number of pictures cached async at the same time by changing `cache_batch_size`. Making it zero or less will try to cache all the images at the same time
+
+> [!WARNING]
+> Trying to cache all the images at the same time could severly affect your performance. Do it only when the number of wallpapers is a managable amount
+
+`number_of_pictures` changes the number of pictures that are shown on the screen at a time
 
 ## Usage
 
@@ -84,6 +92,6 @@ On using it for the first time it will not load anything. Press escape and then 
 
 - [x] Even after caching is over, images do not load
 - [x] Show a "Caching... " text when caching
+- [x] Initial caching takes up lot of resources
 - [ ] Missing the trailing "/" in the paths in config.json breaks it
-- [ ] Initial caching takes up lot of resources
 - [ ] Pressing J/K after using mouse to scroll takes a long time to scroll back
