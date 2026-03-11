@@ -35,7 +35,7 @@ git clone https://github.com/iamsurjog/hyprquickpaper ~/.config/quickshell/hyprq
 
 go to the `config.json` file and change the `"wallpaper_path"` and the `"cache_path"` variables
 
-> [!WARNING]
+> [!IMPORTANT]
 > Make sure to use absolute path (/home/...) for the path and put the trailing "/" at the end of the path
 
 Example config.json
@@ -87,11 +87,15 @@ On using it for the first time it will not load anything. Press escape and then 
 - Scrolling/click and dragging also works for scrolling
 - Clicking also allows selection of a wallpaper
 
+## Common fixes
+- remove everything from the cache folder
+- Make sure to use absolute path (/home/...) for the path and put the trailing "/" at the end of the path
+
 
 ## Issues/TODOS
 
 - [x] Even after caching is over, images do not load
 - [x] Show a "Caching... " text when caching
 - [x] Initial caching takes up lot of resources
+- [x] Pressing J/K after using mouse to scroll takes a long time to scroll back
 - [ ] Missing the trailing "/" in the paths in config.json breaks it
-- [ ] Pressing J/K after using mouse to scroll takes a long time to scroll back

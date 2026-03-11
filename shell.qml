@@ -11,7 +11,7 @@ PanelWindow {
     implicitHeight: 500
     implicitWidth: Screen.width
     color: "transparent"
-    property int speed: 3000
+    property int speed: 5000
 
     aboveWindows: true
     exclusionMode: "Ignore"
@@ -89,31 +89,15 @@ PanelWindow {
         Behavior on contentX {
             SmoothedAnimation {
                 id: anim
-                property int v: main.speed
-                velocity: v
+                property int v: 10
+                // velocity: v
+                duration: 100
             }
         }
-
-        Rectangle {
-            z: 10
-            width: list.tileWidth
-            height: 500
-            color: "transparent"
-
-            border.width: 4
-            border.color: configs.border_color
-
-            transform: Shear { xFactor: -0.25 }
-
-            x: list.selectedIndex * (width + list.spacing) - list.contentX
-
-            Behavior on x {
-                NumberAnimation {
-                    duration: 160
-                    easing.type: Easing.OutCubic
-                }
-            }
+        Component.onCompleted:{
+            anim.v = main.speed
         }
+
 
         delegate: Item {
             property bool active: index === list.selectedIndex
@@ -153,6 +137,7 @@ PanelWindow {
 
                 source: "file://" + configs.cache_path + fileName
 
+                // kind of an on-demand loading
                 // source: shownNow
                 //     ? "file://" + configs.cache_path + fileName
                 //     : ""
@@ -179,6 +164,28 @@ PanelWindow {
                         retryTimer.start()
                     }
                 }
+            }
+            Rectangle {
+                id: border
+                z: 10
+                visible: parent.active
+                width: list.tileWidth + 2
+                height: 500
+                color: "transparent"
+
+                border.width: 4
+                border.color: configs.border_color
+
+                transform: Shear { xFactor: -0.25 }
+
+                // x: list.selectedIndex * (width + list.spacing) - list.contentX
+
+                // Behavior on x {
+                //     NumberAnimation {
+                //         duration: 160
+                //         easing.type: Easing.OutCubic
+                //     }
+                // }
             }
 
             MouseArea {
