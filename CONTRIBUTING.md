@@ -47,6 +47,8 @@ Here are a few open issues that would make good contributions:
 - [ ] **Customizable image transform**  
       The image currently uses a hardcoded **shear transform**. Making this transform configurable would improve customization.
 
+You can work on other issues that are open.
+
 ## General Guidelines
 
 - Keep changes **focused and minimal**.
