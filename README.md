@@ -90,12 +90,3 @@ On using it for the first time it will not load anything. Press escape and then 
 ## Common fixes
 - remove everything from the cache folder
 - Make sure to use absolute path (/home/...) for the path and put the trailing "/" at the end of the path
-
-
-## Issues/TODOS
-
-- [x] Even after caching is over, images do not load
-- [x] Show a "Caching... " text when caching
-- [x] Initial caching takes up lot of resources
-- [x] Pressing J/K after using mouse to scroll takes a long time to scroll back
-- [ ] Missing the trailing "/" in the paths in config.json breaks it
