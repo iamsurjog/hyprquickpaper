@@ -169,7 +169,7 @@ PanelWindow {
                 id: border
                 z: 10
                 visible: parent.active
-                width: list.tileWidth + 2
+                width: list.tileWidth
                 height: 500
                 color: "transparent"
 
