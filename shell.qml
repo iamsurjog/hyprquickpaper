@@ -43,7 +43,7 @@ PanelWindow {
         folder: "file://" + configs.wallpaper_path
         showDirs: false
         nameFilters: ["*.png","*.jpg"]
-        sortField: FolderListModel.Name
+        sortField: FolderListModel.Time
     }
 
     ListView {

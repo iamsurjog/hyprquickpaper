@@ -1,7 +1,7 @@
 {
-    "wallpaper_path": "/home/<usrname>/Pictures/Wallpapers/",
-    "cache_path": "/home/<usrname>/.cache/quickshell/thumbs/",
+    "wallpaper_path": "/home/randomguy/Pictures/Wallpapers/",
+    "cache_path": "/home/randomguy/.cache/quickshell/thumbs/",
     "number_of_pictures": 7,
-    "border_color": "#C27B63",
-    "cache_batch_size": 20
+    "border_color": "#BCC3BE",
+    "cache_batch_size": 1
 }
